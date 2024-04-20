@@ -49,7 +49,9 @@ public class GithubController {
 
             int responseCode = conn.getResponseCode();
             System.out.println(responseCode); // Should print 200
-            discordAnnounce(filteredReviewers[0], githubPayloadDTO.getPull_request().getUrl());
+            if (responseCode == 201 && filteredReviewers.length != 0) {
+                discordAnnounce(filteredReviewers[0], githubPayloadDTO.getPull_request().getUrl());
+            }
             queue++;
             queue = queue > 2 ? 0 : queue;
         } else if (githubPayloadDTO.getAction().equals("unlabeled")) {
@@ -92,6 +94,8 @@ public class GithubController {
         }
 
         String msg = "Hi! " + metion + ", \nyou have been assigned to review a pull request. Please check it out at " + urlPR + ".";
+
+        System.out.println(msg);
 
         // Define the body
         String body = "{\n" +
