@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @RestController
@@ -20,14 +21,17 @@ public class GithubController {
     @Autowired
     private Github githubSecret;
 
+    private int queue = 0;
+
     @PostMapping("/assignee")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException{
         if (githubPayloadDTO.getAction().equals("labeled") && githubPayloadDTO.getLabel().getName().equals("Ready to Review")) {
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber());
             System.out.println(githubPayloadDTO.getPull_request().getUser().getLogin());
             String[] reviewers = new String[]{"BosskungGit", "c3bosskung", "Nine0512"};
-            String[] filteredReviewers = Stream.of(reviewers)
-                    .filter(reviewer -> !reviewer.equals(githubPayloadDTO.getPull_request().getUser().getLogin()))
+            String[] filteredReviewers = IntStream.range(0, reviewers.length)
+                    .filter(index -> !reviewers[index].equals(githubPayloadDTO.getPull_request().getUser().getLogin()) && index == queue)
+                    .mapToObj(index -> reviewers[index])
                     .toArray(String[]::new);
 
             System.out.println(Arrays.toString(filteredReviewers));
@@ -42,6 +46,8 @@ public class GithubController {
 
             int responseCode = conn.getResponseCode();
             System.out.println(responseCode); // Should print 200
+            queue++;
+            queue = queue > 2 ? 0 : queue;
         } else if (githubPayloadDTO.getAction().equals("unlabeled")) {
             return "unlabeled";
         }
