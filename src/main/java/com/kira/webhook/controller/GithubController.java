@@ -3,12 +3,15 @@ package com.kira.webhook.controller;
 import com.kira.webhook.DTOs.GithubPayload.GithubPayloadDTO;
 import com.kira.webhook.config.Github;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/api/github")
@@ -18,11 +21,15 @@ public class GithubController {
     private Github githubSecret;
 
     @PostMapping("/assignee")
-    public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException {
+    public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException, JSONException {
         if (githubPayloadDTO.getAction().equals("labeled") && githubPayloadDTO.getLabel().getName().equals("Ready to Review")) {
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber());
 
-            String jsonInputString = "{\"reviewers\":[\"BosskungGit\", \"c3bosskung\", \"nine0512\"]}";
+            String[] reviewers = new String[]{"BosskungGit", "c3bosskung", "nine0512"};
+            JSONArray jsonArray = new JSONArray(Arrays.stream(reviewers)
+                    .filter(reviewer ->
+                            !reviewer.equals(githubPayloadDTO.getPull_request().getUser().getLogin())));
+            String jsonInputString = "{\"reviewers\":" + jsonArray.toString() + "}";
 
             try(OutputStream os = conn.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes("utf-8");

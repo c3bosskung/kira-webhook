@@ -9,4 +9,5 @@ public class GithubPayloadDTO {
     private String action;
     private Integer number;
     private LabelsDTO label;
+    private PullRequestDTO pull_request;
 }
