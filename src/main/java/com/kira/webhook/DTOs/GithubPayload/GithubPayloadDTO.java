@@ -10,4 +10,5 @@ public class GithubPayloadDTO {
     private Integer number;
     private LabelsDTO label;
     private PullRequestDTO pull_request;
+    private RequestReviewer[] requested_reviewers;
 }
