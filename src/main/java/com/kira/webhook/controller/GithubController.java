@@ -1,6 +1,7 @@
 package com.kira.webhook.controller;
 
 import com.kira.webhook.DTOs.GithubPayload.GithubPayloadDTO;
+import com.kira.webhook.config.Discord;
 import com.kira.webhook.config.Github;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class GithubController {
 
     @Autowired
     private Github githubSecret;
+    @Autowired
+    private Discord discordSecret;
 
     private int queue = 0;
 
@@ -46,6 +49,7 @@ public class GithubController {
 
             int responseCode = conn.getResponseCode();
             System.out.println(responseCode); // Should print 200
+            discordAnnounce(filteredReviewers[0], githubPayloadDTO.getPull_request().getUrl());
             queue++;
             queue = queue > 2 ? 0 : queue;
         } else if (githubPayloadDTO.getAction().equals("unlabeled")) {
@@ -62,6 +66,49 @@ public class GithubController {
         conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
         conn.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
         conn.setDoOutput(true);
+        return conn;
+    }
+
+    private HttpURLConnection discordAnnounce(String reviewer, String urlPR) throws IOException {
+        URL url = new URL("https://discord.com/api/v9/channels/1230784978699288577/messages");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Authorization", discordSecret.getSecret());
+        conn.setDoOutput(true);
+
+        String metion = "@everyone";
+
+        switch (reviewer) {
+            case "c3bosskung":
+                metion = "@iboss";
+                break;
+            case "Nine0512":
+                metion = "@Nine3500";
+                break;
+            default:
+                metion = "@everyone";
+                break;
+        }
+
+        String msg = "Hi! " + metion + ", \nyou have been assigned to review a pull request. Please check it out at " + urlPR + ".";
+
+        // Define the body
+        String body = "{\n" +
+                "  \"content\": \"" + msg + "\"" +
+                "  \"tts\": false,\n" +
+                "  \"embeds\": [{\n" +
+                "    \"title\": \"Hello, Embed!\",\n" +
+                "    \"description\": \"This is an embedded message.\"\n" +
+                "  }]\n" +
+                "}";
+
+        // Write the body to the connection's output stream
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] input = body.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
         return conn;
     }
 
