@@ -23,7 +23,7 @@ public class GithubController {
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException{
         if (githubPayloadDTO.getAction().equals("labeled") && githubPayloadDTO.getLabel().getName().equals("Ready to Review")) {
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber());
-
+            System.out.println(githubPayloadDTO.getPull_request().getUser().getLogin());
             String[] reviewers = new String[]{"BosskungGit", "c3bosskung", "nine0512"};
             JSONArray jsonArray = new JSONArray(Arrays.stream(reviewers)
                     .filter(reviewer ->
