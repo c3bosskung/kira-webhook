@@ -50,7 +50,7 @@ public class GithubController {
             int responseCode = conn.getResponseCode();
             System.out.println(responseCode); // Should print 200
             if (responseCode == 201 && filteredReviewers.length != 0) {
-                discordAnnounce(filteredReviewers[0], githubPayloadDTO.getPull_request().getUrl());
+                discordAnnounce(filteredReviewers[0], githubPayloadDTO.getPull_request().getHtml_url());
             }
             queue++;
             queue = queue > 2 ? 0 : queue;

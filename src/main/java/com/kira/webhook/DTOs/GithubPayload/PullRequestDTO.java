@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class PullRequestDTO {
     private UserDTO user;
-    private String url;
+    private String html_url;
 }
