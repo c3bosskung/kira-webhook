@@ -3,6 +3,8 @@ package com.kira.webhook.controller;
 import com.kira.webhook.DTOs.GithubPayload.GithubPayloadDTO;
 import com.kira.webhook.config.Discord;
 import com.kira.webhook.config.Github;
+import com.kira.webhook.enums.ActionGithub;
+import com.kira.webhook.enums.GithubUser;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +29,12 @@ public class GithubController {
 
     @PostMapping("/assignee")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException{
-        if (githubPayloadDTO.getAction().equals("labeled") && githubPayloadDTO.getLabel().getName().equals("Ready to Review")) {
-            HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber());
+        if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)
+                && githubPayloadDTO.getLabel().getName().equals(ActionGithub.READY_FOR_REVIEW.action)) {
+            System.out.println("Assign reviewer");
+            HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber(), "POST");
             System.out.println(githubPayloadDTO.getPull_request().getUser().getLogin());
-            String[] reviewers = new String[]{"BosskungGit", "c3bosskung", "Nine0512"};
+            String[] reviewers = new String[]{GithubUser.BOSS.user, GithubUser.NINE.user};
             String[] filteredReviewers = IntStream.range(0, reviewers.length)
                     .filter(index -> index == queue)
                     .mapToObj(index -> reviewers[index])
@@ -39,7 +43,7 @@ public class GithubController {
 
             if (githubPayloadDTO.getPull_request().getUser().getLogin().equals(filteredReviewers[0])) {
                 queue++;
-                queue = queue > 2 ? 0 : queue;
+                queue = queue >= reviewers.length ? 0 : queue;
                 filteredReviewers = IntStream.range(0, reviewers.length)
                         .filter(index -> index == queue)
                         .mapToObj(index -> reviewers[index])
@@ -60,17 +64,30 @@ public class GithubController {
                 discordAnnounce(filteredReviewers[0], githubPayloadDTO.getPull_request().getHtml_url());
             }
             queue++;
-            queue = queue > 2 ? 0 : queue;
-        } else if (githubPayloadDTO.getAction().equals("unlabeled")) {
-            return "unlabeled";
+            queue = queue >= reviewers.length ? 0 : queue;
+        } else if (githubPayloadDTO.getAction().equals(ActionGithub.UNLABELED.action)) {
+            System.out.println("Delete reviewer");
+            HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber(), "DELETE");
+
+            String jsonInputString = "{\"reviewers\": \" "+ githubPayloadDTO.getRequested_reviewers().getLogin() +" \" }";
+
+            System.out.println(jsonInputString);
+
+            try(OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonInputString.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = conn.getResponseCode();
+            System.out.println(responseCode); // Should print 200
         }
         return null;
     }
 
-    private HttpURLConnection getHttpURLConnection(Integer prNumber) throws IOException {
+    private HttpURLConnection getHttpURLConnection(Integer prNumber, String method) throws IOException {
         URL url = new URL("https://api.github.com/repos/c3bosskung/kira-webhook/pulls/" + prNumber + "/requested_reviewers");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
+        conn.setRequestMethod(method);
         conn.setRequestProperty("Accept", "application/vnd.github+json");
         conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
         conn.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
