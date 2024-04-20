@@ -1,5 +1,6 @@
 package com.kira.webhook.controller;
 
+import com.kira.webhook.DTOs.GithubPayload.GithubPayloadDTO;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -7,8 +8,12 @@ import org.springframework.web.bind.annotation.*;
 public class GithubController {
 
     @PostMapping("/assignee")
-    public String assignee(@RequestBody String body) {
-        return "body: " + body;
+    public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) {
+        if (githubPayloadDTO.getAction().equals("labeled")) {
+            return "labeled";
+        } else if (githubPayloadDTO.getAction().equals("unlabeled")) {
+            return "unlabeled";
+        }
     }
 
 }
