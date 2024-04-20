@@ -107,6 +107,8 @@ public class GithubController {
                 "  }]\n" +
                 "}";
 
+        System.out.println(body);
+
         // Write the body to the connection's output stream
         try (OutputStream os = conn.getOutputStream()) {
             byte[] input = body.getBytes("utf-8");
