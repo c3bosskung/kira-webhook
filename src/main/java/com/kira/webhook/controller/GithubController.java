@@ -93,7 +93,7 @@ public class GithubController {
                 break;
         }
 
-        String msg = "Hi! " + metion + ", \nyou have been assigned to review a pull request. Please check it out at " + urlPR + ".";
+        String msg = "Hi! " + metion + ", you have been assigned to review a pull request. Please check it out at " + urlPR + ".";
 
         System.out.println(msg);
 
