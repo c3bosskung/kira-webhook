@@ -2,9 +2,8 @@ package com.kira.webhook.controller;
 
 import com.kira.webhook.DTOs.GithubPayload.GithubPayloadDTO;
 import com.kira.webhook.config.Github;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -21,7 +20,7 @@ public class GithubController {
     private Github githubSecret;
 
     @PostMapping("/assignee")
-    public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException, JSONException {
+    public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException{
         if (githubPayloadDTO.getAction().equals("labeled") && githubPayloadDTO.getLabel().getName().equals("Ready to Review")) {
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber());
 
