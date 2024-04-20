@@ -25,7 +25,7 @@ public class GithubController {
         if (githubPayloadDTO.getAction().equals("labeled") && githubPayloadDTO.getLabel().getName().equals("Ready to Review")) {
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber());
             System.out.println(githubPayloadDTO.getPull_request().getUser().getLogin());
-            String[] reviewers = new String[]{"BosskungGit", "c3bosskung", "nine0512"};
+            String[] reviewers = new String[]{"BosskungGit", "c3bosskung", "Nine0512"};
             String[] filteredReviewers = Stream.of(reviewers)
                     .filter(reviewer -> !reviewer.equals(githubPayloadDTO.getPull_request().getUser().getLogin()))
                     .toArray(String[]::new);
