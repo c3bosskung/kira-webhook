@@ -83,10 +83,10 @@ public class GithubController {
 
         switch (reviewer) {
             case "c3bosskung":
-                metion = "@iboss";
+                metion = "<@448817650869469185>";
                 break;
             case "Nine0512":
-                metion = "@Nine3500";
+                metion = "<@808572813526040616>";
                 break;
             default:
                 metion = "@everyone";
