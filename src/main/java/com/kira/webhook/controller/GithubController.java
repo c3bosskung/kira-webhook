@@ -15,7 +15,7 @@ import java.net.URL;
 public class GithubController {
 
     @Autowired
-    private static Github githubSecret;
+    private Github githubSecret;
 
     @PostMapping("/assignee")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException {
@@ -37,7 +37,7 @@ public class GithubController {
         return null;
     }
 
-    private static HttpURLConnection getHttpURLConnection() throws IOException {
+    private HttpURLConnection getHttpURLConnection() throws IOException {
         URL url = new URL("https://api.github.com/repos/c3bosskung/kira-webhook/pulls/1/requested_reviewers");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
