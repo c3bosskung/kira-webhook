@@ -113,6 +113,10 @@ public class GithubController {
             os.write(input, 0, input.length);
         }
 
+        int responseCode = conn.getResponseCode();
+        System.out.println(responseCode); // Should print 200
+        System.out.println(conn.getResponseMessage());
+
         return conn;
     }
 
