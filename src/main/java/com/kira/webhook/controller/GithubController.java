@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/github")
@@ -25,9 +26,10 @@ public class GithubController {
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber());
             System.out.println(githubPayloadDTO.getPull_request().getUser().getLogin());
             String[] reviewers = new String[]{"BosskungGit", "c3bosskung", "nine0512"};
-            JSONArray jsonArray = new JSONArray(Arrays.stream(reviewers)
-                    .filter(reviewer ->
-                            !reviewer.equals(githubPayloadDTO.getPull_request().getUser().getLogin())).toArray());
+            String[] filteredReviewers = Stream.of(reviewers)
+                    .filter(reviewer -> !reviewer.equals(githubPayloadDTO.getPull_request().getUser().getLogin()))
+                    .toArray(String[]::new);
+            JSONArray jsonArray = new JSONArray(Arrays.asList(filteredReviewers));
             String jsonInputString = "{\"reviewers\":" + jsonArray.toString() + "}";
 
             try(OutputStream os = conn.getOutputStream()) {
