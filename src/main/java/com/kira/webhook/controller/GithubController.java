@@ -20,9 +20,9 @@ public class GithubController {
     @PostMapping("/assignee")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException {
         if (githubPayloadDTO.getAction().equals("labeled") && githubPayloadDTO.getLabel().getName().equals("Ready to Review")) {
-            HttpURLConnection conn = getHttpURLConnection();
+            HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber());
 
-            String jsonInputString = "{\"reviewers\":[\"BosskungGit\"]}";
+            String jsonInputString = "{\"reviewers\":[\"BosskungGit\", \"c3bosskung\", \"nine0512\"]}";
 
             try(OutputStream os = conn.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes("utf-8");
@@ -37,8 +37,8 @@ public class GithubController {
         return null;
     }
 
-    private HttpURLConnection getHttpURLConnection() throws IOException {
-        URL url = new URL("https://api.github.com/repos/c3bosskung/kira-webhook/pulls/1/requested_reviewers");
+    private HttpURLConnection getHttpURLConnection(Integer prNumber) throws IOException {
+        URL url = new URL("https://api.github.com/repos/c3bosskung/kira-webhook/pulls/" + prNumber + "/requested_reviewers");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Accept", "application/vnd.github+json");
