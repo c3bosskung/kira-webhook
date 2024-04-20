@@ -69,7 +69,7 @@ public class GithubController {
             System.out.println("Delete reviewer");
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber(), "DELETE");
 
-            String jsonInputString = "{\"reviewers\": \" "+ githubPayloadDTO.getRequested_reviewers().getLogin() +" \" }";
+            String jsonInputString = "{\"reviewers\": \" "+ githubPayloadDTO.getRequested_reviewers()[0].getLogin() +" \" }";
 
             System.out.println(jsonInputString);
 
