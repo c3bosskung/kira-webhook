@@ -29,17 +29,10 @@ public class GithubController {
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber());
             System.out.println(githubPayloadDTO.getPull_request().getUser().getLogin());
             String[] reviewers = new String[]{"BosskungGit", "c3bosskung", "Nine0512"};
-            IntStream IntfilteredReviewers = IntStream.range(0, reviewers.length)
-                    .filter(index -> !reviewers[index].equals(githubPayloadDTO.getPull_request().getUser().getLogin()) && index == queue);
-
-            String[] filteredReviewers;
-
-            if (IntfilteredReviewers.count() == 0) {
-                queue = 0;
-                filteredReviewers = new String[]{reviewers[queue]};
-            } else {
-                filteredReviewers = IntfilteredReviewers.mapToObj(index -> reviewers[index]).toArray(String[]::new);
-            }
+            String[] filteredReviewers = IntStream.range(0, reviewers.length)
+                    .filter(index -> !reviewers[index].equals(githubPayloadDTO.getPull_request().getUser().getLogin()) && index == queue)
+                    .mapToObj(index -> reviewers[index])
+                    .toArray(String[]::new);
 
             System.out.println(Arrays.toString(filteredReviewers));
 
