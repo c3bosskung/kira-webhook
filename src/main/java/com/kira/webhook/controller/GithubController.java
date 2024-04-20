@@ -1,6 +1,8 @@
 package com.kira.webhook.controller;
 
 import com.kira.webhook.DTOs.GithubPayload.GithubPayloadDTO;
+import com.kira.webhook.config.Github;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -11,6 +13,9 @@ import java.net.URL;
 @RestController
 @RequestMapping("/api/github")
 public class GithubController {
+
+    @Autowired
+    private static Github githubSecret;
 
     @PostMapping("/assignee")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException {
@@ -37,7 +42,7 @@ public class GithubController {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Accept", "application/vnd.github+json");
-        conn.setRequestProperty("Authorization", "Bearer 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");
+        conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
         conn.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
         conn.setDoOutput(true);
         return conn;
