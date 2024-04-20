@@ -33,6 +33,10 @@ public class GithubController {
                     .filter(index -> !reviewers[index].equals(githubPayloadDTO.getPull_request().getUser().getLogin()) && index == queue)
                     .mapToObj(index -> reviewers[index])
                     .toArray(String[]::new);
+            if (filteredReviewers.length == 0) {
+                queue = 0;
+                filteredReviewers = (String[]) Arrays.stream(new String[]{reviewers[queue]}).toArray();
+            }
 
             System.out.println(Arrays.toString(filteredReviewers));
 
