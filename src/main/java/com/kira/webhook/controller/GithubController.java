@@ -100,11 +100,11 @@ public class GithubController {
         // Define the body
         String body = "{\n" +
                 "  \"content\": \"" + msg + "\"" +
-                "  \"tts\": false,\n" +
-                "  \"embeds\": [{\n" +
-                "    \"title\": \"Hello, Embed!\",\n" +
-                "    \"description\": \"This is an embedded message.\"\n" +
-                "  }]\n" +
+                "  \"tts\": false," +
+                "  \"embeds\": [{" +
+                "    \"title\": \"Hello, Embed!\"," +
+                "    \"description\": \"This is an embedded message.\"" +
+                "  }]" +
                 "}";
 
         System.out.println(body);
