@@ -13,7 +13,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/github")
@@ -33,11 +32,19 @@ public class GithubController {
             System.out.println(githubPayloadDTO.getPull_request().getUser().getLogin());
             String[] reviewers = new String[]{"BosskungGit", "c3bosskung", "Nine0512"};
             String[] filteredReviewers = IntStream.range(0, reviewers.length)
-                    .filter(index -> !reviewers[index].equals(githubPayloadDTO.getPull_request().getUser().getLogin()) && index == queue)
+                    .filter(index -> index == queue)
                     .mapToObj(index -> reviewers[index])
                     .toArray(String[]::new);
 
-            System.out.println(Arrays.toString(filteredReviewers));
+
+            if (githubPayloadDTO.getPull_request().getUser().equals(filteredReviewers[0])) {
+                queue++;
+                queue = queue > 2 ? 0 : queue;
+                filteredReviewers = IntStream.range(0, reviewers.length)
+                        .filter(index -> index == queue)
+                        .mapToObj(index -> reviewers[index])
+                        .toArray(String[]::new);
+            }
 
             JSONArray jsonArray = new JSONArray(Arrays.asList(filteredReviewers));
             String jsonInputString = "{\"reviewers\":" + jsonArray.toString() + "}";
@@ -97,11 +104,9 @@ public class GithubController {
 
         System.out.println(msg);
 
-        // Define the body
         String body = "{ \"content\": \"" + msg + "\"}";
         System.out.println(body);
 
-        // Write the body to the connection's output stream
         try (OutputStream os = conn.getOutputStream()) {
             byte[] input = body.getBytes("utf-8");
             os.write(input, 0, input.length);
