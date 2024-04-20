@@ -111,12 +111,16 @@ public class GithubController {
             metion = DiscordUser.BOSS.user;
         } else if (reviewer.equals(GithubUser.NINE.user)) {
             metion = DiscordUser.NINE.user;
+        } else {
+            metion = DiscordUser.EVERYONE.user;
         }
 
         if (author.equals(GithubUser.BOSS.user)) {
-            author = DiscordUser.BOSS.user;
+            authorMention = DiscordUser.BOSS.user;
         } else if (author.equals(GithubUser.NINE.user)) {
-            author = DiscordUser.NINE.user;
+            authorMention = DiscordUser.NINE.user;
+        } else {
+            authorMention = DiscordUser.EVERYONE.user;
         }
 
         String msg = "Hi! " + metion + ", you have been assigned to review a pull request. Please check it out at " + urlPR + ". Author: " + authorMention + ".";
