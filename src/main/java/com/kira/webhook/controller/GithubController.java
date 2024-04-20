@@ -98,15 +98,7 @@ public class GithubController {
         System.out.println(msg);
 
         // Define the body
-        String body = "{\n" +
-                "  \"content\": \"" + msg + "\"" +
-                "  \"tts\": false," +
-                "  \"embeds\": [{" +
-                "    \"title\": \"Hello, Embed!\"," +
-                "    \"description\": \"This is an embedded message.\"" +
-                "  }]" +
-                "}";
-
+        String body = "{ \"content\": \"" + msg + "\"}";
         System.out.println(body);
 
         // Write the body to the connection's output stream
