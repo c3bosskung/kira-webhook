@@ -32,15 +32,12 @@ public class GithubController {
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException{
         if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)
                 && githubPayloadDTO.getLabel().getName().equals(ActionGithub.READY_FOR_REVIEW.action)) {
-            System.out.println("Assign reviewer");
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber(), "POST");
-            System.out.println(githubPayloadDTO.getPull_request().getUser().getLogin());
             String[] reviewers = new String[]{GithubUser.BOSS.user, GithubUser.NINE.user};
             String[] filteredReviewers = IntStream.range(0, reviewers.length)
                     .filter(index -> index == queue)
                     .mapToObj(index -> reviewers[index])
                     .toArray(String[]::new);
-
 
             if (githubPayloadDTO.getPull_request().getUser().getLogin().equals(filteredReviewers[0])) {
                 queue++;
@@ -60,27 +57,19 @@ public class GithubController {
             }
 
             int responseCode = conn.getResponseCode();
-            System.out.println(responseCode); // Should print 200
             if (responseCode == 201 && filteredReviewers.length != 0) {
                 discordAnnounce(filteredReviewers[0], githubPayloadDTO.getPull_request().getHtml_url());
             }
             queue++;
             queue = queue >= reviewers.length ? 0 : queue;
         } else if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.UNLABELED.action)) {
-            System.out.println("Delete reviewer");
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber(), "DELETE");
-
             String jsonInputString = "{\"reviewers\": \" "+ githubPayloadDTO.getRequested_reviewers()[0].getLogin() +" \" }";
-
-            System.out.println(jsonInputString);
 
             try(OutputStream os = conn.getOutputStream()) {
                 byte[] input = jsonInputString.getBytes("utf-8");
                 os.write(input, 0, input.length);
             }
-
-            int responseCode = conn.getResponseCode();
-            System.out.println(responseCode); // Should print 200
         }
         return null;
     }
@@ -119,21 +108,12 @@ public class GithubController {
         }
 
         String msg = "Hi! " + metion + ", you have been assigned to review a pull request. Please check it out at " + urlPR + ".";
-
-        System.out.println(msg);
-
         String body = "{ \"content\": \"" + msg + "\"}";
-        System.out.println(body);
 
         try (OutputStream os = conn.getOutputStream()) {
             byte[] input = body.getBytes("utf-8");
             os.write(input, 0, input.length);
         }
-
-        int responseCode = conn.getResponseCode();
-        System.out.println(responseCode); // Should print 200
-        System.out.println(conn.getResponseMessage());
-
         return conn;
     }
 
