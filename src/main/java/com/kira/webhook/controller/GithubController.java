@@ -4,6 +4,7 @@ import com.kira.webhook.DTOs.GithubPayload.GithubPayloadDTO;
 import com.kira.webhook.config.Discord;
 import com.kira.webhook.config.Github;
 import com.kira.webhook.enums.ActionGithub;
+import com.kira.webhook.enums.DiscordUser;
 import com.kira.webhook.enums.GithubUser;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class GithubController {
 
     @PostMapping("/assignee")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException{
-        if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)
+        if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)
                 && githubPayloadDTO.getLabel().getName().equals(ActionGithub.READY_FOR_REVIEW.action)) {
             System.out.println("Assign reviewer");
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber(), "POST");
@@ -65,7 +66,7 @@ public class GithubController {
             }
             queue++;
             queue = queue >= reviewers.length ? 0 : queue;
-        } else if (githubPayloadDTO.getAction().equals(ActionGithub.UNLABELED.action)) {
+        } else if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.UNLABELED.action)) {
             System.out.println("Delete reviewer");
             HttpURLConnection conn = getHttpURLConnection(githubPayloadDTO.getNumber(), "DELETE");
 
@@ -107,13 +108,13 @@ public class GithubController {
 
         switch (reviewer) {
             case "c3bosskung":
-                metion = "<@448817650869469185>";
+                metion = DiscordUser.BOSS.user;
                 break;
             case "Nine0512":
-                metion = "<@808572813526040616>";
+                metion = DiscordUser.NINE.user;
                 break;
             default:
-                metion = "@everyone";
+                metion = DiscordUser.EVERYONE.user;
                 break;
         }
 
