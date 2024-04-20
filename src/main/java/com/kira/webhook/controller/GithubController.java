@@ -14,6 +14,7 @@ public class GithubController {
         } else if (githubPayloadDTO.getAction().equals("unlabeled")) {
             return "unlabeled";
         }
+        return null;
     }
 
 }
