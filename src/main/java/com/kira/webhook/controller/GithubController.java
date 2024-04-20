@@ -37,7 +37,7 @@ public class GithubController {
                     .toArray(String[]::new);
 
 
-            if (githubPayloadDTO.getPull_request().getUser().equals(filteredReviewers[0])) {
+            if (githubPayloadDTO.getPull_request().getUser().getLogin().equals(filteredReviewers[0])) {
                 queue++;
                 queue = queue > 2 ? 0 : queue;
                 filteredReviewers = IntStream.range(0, reviewers.length)
