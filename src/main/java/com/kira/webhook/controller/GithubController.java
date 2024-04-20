@@ -29,6 +29,9 @@ public class GithubController {
             String[] filteredReviewers = Stream.of(reviewers)
                     .filter(reviewer -> !reviewer.equals(githubPayloadDTO.getPull_request().getUser().getLogin()))
                     .toArray(String[]::new);
+
+            System.out.println(Arrays.toString(filteredReviewers));
+
             JSONArray jsonArray = new JSONArray(Arrays.asList(filteredReviewers));
             String jsonInputString = "{\"reviewers\":" + jsonArray.toString() + "}";
 
