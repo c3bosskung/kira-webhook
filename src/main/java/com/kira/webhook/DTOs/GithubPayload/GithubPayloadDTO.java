@@ -7,4 +7,6 @@ import lombok.Setter;
 @Setter
 public class GithubPayloadDTO {
     private String action;
+    private Integer number;
+    private LabelsDTO label;
 }
