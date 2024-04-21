@@ -62,7 +62,7 @@ public class GithubController {
             int responseCode = conn.getResponseCode();
             System.out.println(responseCode); // Should print 200
             if (responseCode == 201 && filteredReviewers.length != 0) {
-                discordAnnounce(filteredReviewers[0], githubPayloadDTO.getPull_request().getHtml_url());
+                discordAnnounce(filteredReviewers[0], githubPayloadDTO.getPull_request().getHtml_url(), githubPayloadDTO.getPull_request().getUser().getLogin());
             }
             queue++;
             queue = queue >= reviewers.length ? 0 : queue;
@@ -96,7 +96,7 @@ public class GithubController {
         return conn;
     }
 
-    private HttpURLConnection discordAnnounce(String reviewer, String urlPR) throws IOException {
+    private HttpURLConnection discordAnnounce(String reviewer, String urlPR, String author) throws IOException {
         URL url = new URL("https://discord.com/api/v9/channels/1230784978699288577/messages");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -105,20 +105,25 @@ public class GithubController {
         conn.setDoOutput(true);
 
         String metion = "@everyone";
+        String authorMention = "@everyone";
 
-        switch (reviewer) {
-            case "c3bosskung":
-                metion = DiscordUser.BOSS.user;
-                break;
-            case "Nine0512":
-                metion = DiscordUser.NINE.user;
-                break;
-            default:
-                metion = DiscordUser.EVERYONE.user;
-                break;
+        if (reviewer.equals(GithubUser.BOSS.user)) {
+            metion = DiscordUser.BOSS.user;
+        } else if (reviewer.equals(GithubUser.NINE.user)) {
+            metion = DiscordUser.NINE.user;
+        } else {
+            metion = DiscordUser.EVERYONE.user;
         }
 
-        String msg = "Hi! " + metion + ", you have been assigned to review a pull request. Please check it out at " + urlPR + ".";
+        if (author.equals(GithubUser.BOSS.user)) {
+            authorMention = DiscordUser.BOSS.user;
+        } else if (author.equals(GithubUser.NINE.user)) {
+            authorMention = DiscordUser.NINE.user;
+        } else {
+            authorMention = DiscordUser.EVERYONE.user;
+        }
+
+        String msg = "Hi! " + metion + ", you have been assigned to review a pull request. Please check it out at " + urlPR + ". Author: " + authorMention + ".";
 
         System.out.println(msg);
 
