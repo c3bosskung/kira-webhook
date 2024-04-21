@@ -1,12 +1,12 @@
 package com.kira.webhook.services;
 
-import com.kira.webhook.enums.GithubUser;
 import com.kira.webhook.utils.SendRequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Arrays;
 
 @Service
 public class GithubService {
@@ -17,7 +17,8 @@ public class GithubService {
     @Autowired DiscordService discordService;
 
     public HttpURLConnection assignUserToReviewers(Integer prNumber, String method, String author, String prURL) throws IOException {
-        String[] reviewers = new String[]{GithubUser.BOSS.user, GithubUser.NINE.user};
+        String[] reviewers = sendRequestUtils.getReviewerFromGithub();
+        System.out.println("All reviewer: " + Arrays.toString(reviewers));
         String reviewer = sendRequestUtils.getReviewer(reviewers, author);
 
         System.out.println("Reviewer: " + reviewer);
