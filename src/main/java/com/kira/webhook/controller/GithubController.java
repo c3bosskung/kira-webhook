@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Arrays;
 
 
 @RestController
@@ -20,9 +21,12 @@ public class GithubController {
     @PostMapping("/request-reviewer")
     public String assignee(@RequestHeader(value = "X-GitHub-Event") String event, @RequestBody GithubPayloadDTO githubPayloadDTO){
         try {
-            if (event.equals("push")) {
-                System.out.println("Push  event not supported");
-                return "Push event not supported";
+            if (githubPayloadDTO.getAction().equals(ActionGithub.SYNCHRONIZE.action) &&
+                    Arrays.stream(githubPayloadDTO
+                            .getPull_request().getLabels())
+                            .anyMatch(label -> label.getName().equals(ActionGithub.READY_FOR_REVIEW.action))) {
+                System.out.println("Remove labels");
+                return "Remove labels";
             } else if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
                 HttpURLConnection conn = githubService.assignUserToReviewers(
                         githubPayloadDTO.getNumber(),

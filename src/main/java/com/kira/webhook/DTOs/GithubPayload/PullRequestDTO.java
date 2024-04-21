@@ -8,4 +8,5 @@ import lombok.Setter;
 public class PullRequestDTO {
     private UserDTO user;
     private String html_url;
+    private LabelDTO[] labels;
 }
