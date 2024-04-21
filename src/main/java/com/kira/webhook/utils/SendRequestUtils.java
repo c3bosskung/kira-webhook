@@ -112,7 +112,7 @@ public class SendRequestUtils {
     public String getReviewer(String[] reviewers, String author) {
         System.out.println("queue: " + queue);
         String reviewer = reviewers[queue].equals(author) ?
-                reviewers[queue + 1 >= reviewers.length ? 0 : queue++] : reviewers[queue];
+                reviewers[queue + 1 >= reviewers.length ? 0 : ++queue] : reviewers[queue];
         queue++;
         System.out.println("queue (Person): " + reviewer);
         return reviewer;
