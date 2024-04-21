@@ -17,7 +17,7 @@ public class GithubController {
     @Autowired
     private GithubService githubService;
 
-    @PostMapping("/assignee")
+    @PostMapping("/request-reviewer")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO){
         try {
             if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
