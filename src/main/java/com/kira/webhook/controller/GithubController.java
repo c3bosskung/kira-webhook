@@ -33,16 +33,20 @@ public class GithubController {
     @PostMapping("/assignee")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException{
         try {
-            githubService.assignUserToReviewers(
-                    githubPayloadDTO.getNumber(),
-                    "POST",
-                    githubPayloadDTO
-                            .getPull_request()
-                            .getUser()
-                            .getLogin(),
-                    githubPayloadDTO.getPull_request().getHtml_url()
-            );
-            return "Assignee added";
+            if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
+                githubService.assignUserToReviewers(
+                        githubPayloadDTO.getNumber(),
+                        "POST",
+                        githubPayloadDTO
+                                .getPull_request()
+                                .getUser()
+                                .getLogin(),
+                        githubPayloadDTO.getPull_request().getHtml_url()
+                );
+                return "Assignee added";
+            } else {
+                return "Action not supported";
+            }
         } catch (IOException e) {
             return "Error: " + e.getMessage();
         }
