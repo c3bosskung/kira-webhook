@@ -29,9 +29,11 @@ public class GithubService {
         HttpURLConnection conn = sendRequestUtils.githubReviewerAssign(reviewer, author, prNumber, method);
         System.out.println("Connection Github: " + conn.getResponseCode());
         System.out.println("Connection Github: " + conn.getResponseMessage());
-        HttpURLConnection dis = discordService.sendMessage(reviewer, prURL, author);
-        System.out.println("Connection Discord: " + dis.getResponseCode());
-        System.out.println("Connection Discord: " + dis.getResponseMessage());
-        return discordService.sendMessage(reviewer, prURL, author);
+        if (conn.getResponseCode() == 201) {
+            HttpURLConnection dis = discordService.sendMessage(reviewer, prURL, author);
+            System.out.println("Connection Discord: " + dis.getResponseCode());
+            System.out.println("Connection Discord: " + dis.getResponseMessage());
+        }
+        return conn;
     }
 }
