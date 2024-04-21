@@ -18,8 +18,9 @@ public class GithubController {
     private GithubService githubService;
 
     @PostMapping("/request-reviewer")
-    public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO){
+    public String assignee(@RequestHeader(value = "X-GitHub-Event") String event, @RequestBody GithubPayloadDTO githubPayloadDTO){
         try {
+            System.out.println("Event: " + event);
             if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
                 HttpURLConnection conn = githubService.assignUserToReviewers(
                         githubPayloadDTO.getNumber(),
@@ -42,5 +43,4 @@ public class GithubController {
             return "Error: " + e.getMessage();
         }
     }
-
 }
