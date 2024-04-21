@@ -110,19 +110,11 @@ public class SendRequestUtils {
     }
 
     public String getReviewer(String[] reviewers, String author) {
-        String[] filteredReviewers = IntStream.range(0, reviewers.length)
-                .filter(index -> index == queue)
-                .mapToObj(index -> reviewers[index])
-                .toArray(String[]::new);
-
-
-        if (author.equals(filteredReviewers[0])) {
-           filteredReviewers[0] = reviewers[queue + 1 >= reviewers.length ? 0 : queue + 1];
-        }
-
-        queue = queue + 1 >= reviewers.length ? 0 : queue + 1;
-
-        return filteredReviewers[0];
+        System.out.println("queue: " + queue);
+        String reviewer = reviewers[queue].equals(author) ?
+                reviewers[queue + 1 >= reviewers.length ? 0 : queue++] : reviewers[queue];
+        queue++;
+        return reviewer;
     }
 
     private String getMention(String reviewer) {
