@@ -28,7 +28,7 @@ public class GithubController {
                 HttpURLConnection conn = githubService.removeLabel(githubPayloadDTO.getNumber());
                 System.out.println("Connection: " + conn.getResponseCode());
                 if (conn.getResponseCode() == 200) {
-                    return "Label  removed";
+                    return "Label removed";
                 } else {
                     return "Error: " + conn.getResponseMessage();
                 }
