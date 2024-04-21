@@ -21,7 +21,7 @@ public class GithubController {
     public String assignee(@RequestHeader(value = "X-GitHub-Event") String event, @RequestBody GithubPayloadDTO githubPayloadDTO){
         try {
             if (event.equals("push")) {
-                System.out.println("Push event not supported");
+                System.out.println("Push  event not supported");
                 return "Push event not supported";
             } else if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
                 HttpURLConnection conn = githubService.assignUserToReviewers(
