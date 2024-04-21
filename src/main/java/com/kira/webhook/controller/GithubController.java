@@ -25,7 +25,7 @@ public class GithubController {
                     Arrays.stream(githubPayloadDTO
                             .getPull_request().getLabels())
                             .anyMatch(label -> label.getName().equals(ActionGithub.READY_FOR_REVIEW.action))) {
-                System.out.println("Remove  labels");
+                System.out.println("Remove   labels");
                 return "Remove labels";
             } else if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
                 HttpURLConnection conn = githubService.assignUserToReviewers(
