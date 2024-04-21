@@ -14,10 +14,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 @Service
 public class SendRequestUtils {
@@ -61,7 +59,6 @@ public class SendRequestUtils {
         conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
         conn.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
 
-        // Get the response
         int responseCode = conn.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) { // success
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -72,14 +69,11 @@ public class SendRequestUtils {
                 content.append(inputLine);
             }
 
-            // Close connections
             in.close();
             conn.disconnect();
 
-            // Parse JSON response
             JSONArray jsonArray = new JSONArray(content.toString());
 
-            // Convert JSONArray to String array
             String[] reviewers = new String[jsonArray.length()];
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -110,11 +104,9 @@ public class SendRequestUtils {
     }
 
     public String getReviewer(String[] reviewers, String author) {
-        System.out.println("queue: " + queue);
         String reviewer = reviewers[queue].equals(author) ?
                 reviewers[queue + 1 >= reviewers.length ? 0 : ++queue] : reviewers[queue];
         queue = queue + 1 >= reviewers.length ? 0 : queue + 1;
-        System.out.println("queue (Person): " + reviewer);
         return reviewer;
     }
 

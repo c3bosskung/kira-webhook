@@ -1,6 +1,5 @@
 package com.kira.webhook.services;
 
-import com.kira.webhook.enums.GithubUser;
 import com.kira.webhook.utils.SendRequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,23 +1,14 @@
 package com.kira.webhook.controller;
 
 import com.kira.webhook.DTOs.GithubPayload.GithubPayloadDTO;
-import com.kira.webhook.config.Discord;
-import com.kira.webhook.config.Github;
 import com.kira.webhook.enums.ActionGithub;
-import com.kira.webhook.enums.DiscordUser;
-import com.kira.webhook.enums.GithubUser;
-import com.kira.webhook.services.DiscordService;
 import com.kira.webhook.services.GithubService;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.stream.IntStream;
+
 
 @RestController
 @RequestMapping("/api/github")
