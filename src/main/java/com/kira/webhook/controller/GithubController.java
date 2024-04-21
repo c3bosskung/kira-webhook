@@ -20,8 +20,10 @@ public class GithubController {
     @PostMapping("/request-reviewer")
     public String assignee(@RequestHeader(value = "X-GitHub-Event") String event, @RequestBody GithubPayloadDTO githubPayloadDTO){
         try {
-            System.out.println("Event: " + event);
-            if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
+            if (event.equals("push")) {
+                System.out.println("Push event not supported");
+                return "Push event not supported";
+            } else if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
                 HttpURLConnection conn = githubService.assignUserToReviewers(
                         githubPayloadDTO.getNumber(),
                         "POST",
