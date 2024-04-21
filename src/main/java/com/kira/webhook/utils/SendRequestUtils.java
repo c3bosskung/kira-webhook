@@ -88,6 +88,15 @@ public class SendRequestUtils {
         return null;
     }
 
+    public HttpURLConnection removeLabel(Integer prNumber) throws IOException {
+        HttpURLConnection conn = openConnection("https://api.github.com/repos/c3bosskung/kira-webhook/issues/" + prNumber + "/labels");
+        conn.setRequestMethod("DELETE");
+        conn.setRequestProperty("Accept", "application/vnd.github+json");
+        conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
+        conn.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
+        return conn;
+    }
+
     public HttpURLConnection discordAnnounce(String reviewer, String urlPR, String author) throws IOException {
         HttpURLConnection conn = openConnection(discordSecret.getApi() + discordSecret.getChannel() + "/messages");
         conn.setRequestMethod("POST");

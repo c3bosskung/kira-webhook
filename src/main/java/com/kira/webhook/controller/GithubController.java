@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Arrays;
 
 
 @RestController
@@ -17,10 +18,20 @@ public class GithubController {
     @Autowired
     private GithubService githubService;
 
-    @PostMapping("/assignee")
+    @PostMapping("/request-reviewer")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO){
         try {
-            if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
+            if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.SYNCHRONIZE.action) &&
+                    Arrays.stream(githubPayloadDTO
+                            .getPull_request().getLabels())
+                            .anyMatch(label -> label.getName().equals(ActionGithub.READY_FOR_REVIEW.action))) {
+                HttpURLConnection conn = githubService.removeLabel(githubPayloadDTO.getNumber());
+                if (conn.getResponseCode() == 204) {
+                    return "Label removed";
+                } else {
+                    return "Error: " + conn.getResponseMessage();
+                }
+            } else if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
                 HttpURLConnection conn = githubService.assignUserToReviewers(
                         githubPayloadDTO.getNumber(),
                         "POST",
@@ -42,5 +53,4 @@ public class GithubController {
             return "Error: " + e.getMessage();
         }
     }
-
 }
