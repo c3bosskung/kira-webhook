@@ -19,7 +19,19 @@ public class GithubService {
     public HttpURLConnection assignUserToReviewers(Integer prNumber, String method, String author, String prURL) throws IOException {
         String[] reviewers = new String[]{GithubUser.BOSS.user, GithubUser.NINE.user};
         String reviewer = sendRequestUtils.getReviewer(reviewers, author);
-        sendRequestUtils.githubReviewerAssign(reviewer, author, prNumber, method);
+
+        System.out.println("Reviewer: " + reviewer);
+        System.out.println("author: " + author);
+        System.out.println("prNumber: " + prNumber);
+        System.out.println("method: " + method);
+        System.out.println("prURL: " + prURL);
+
+        HttpURLConnection conn = sendRequestUtils.githubReviewerAssign(reviewer, author, prNumber, method);
+        System.out.println("Connection Github: " + conn.getResponseCode());
+        System.out.println("Connection Github: " + conn.getResponseMessage());
+        HttpURLConnection dis = discordService.sendMessage(reviewer, prURL, author);
+        System.out.println("Connection Discord: " + dis.getResponseCode());
+        System.out.println("Connection Discord: " + dis.getResponseMessage());
         return discordService.sendMessage(reviewer, prURL, author);
     }
 }

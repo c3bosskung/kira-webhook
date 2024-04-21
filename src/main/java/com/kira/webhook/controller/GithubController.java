@@ -34,7 +34,7 @@ public class GithubController {
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException{
         try {
             if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
-                HttpURLConnection response = githubService.assignUserToReviewers(
+                githubService.assignUserToReviewers(
                         githubPayloadDTO.getNumber(),
                         "POST",
                         githubPayloadDTO
@@ -43,8 +43,6 @@ public class GithubController {
                                 .getLogin(),
                         githubPayloadDTO.getPull_request().getHtml_url()
                 );
-                System.out.println(response.getResponseCode());
-                System.out.println(response.getResponseMessage());
                 return "Assignee added";
             } else {
                 return "Action not supported";
