@@ -18,9 +18,8 @@ public class GithubService {
     @Autowired DiscordService discordService;
 
     public HttpURLConnection assignUserToReviewers(Integer prNumber, String method, String author, String prURL) throws IOException {
-        String[] reviewers = new String[]{GithubUser.BOSS.user, GithubUser.NINE.user};
-        String[] ghReview = sendRequestUtils.getReviewerFromGithub();
-        System.out.println(Arrays.toString(ghReview));
+        String[] reviewers = sendRequestUtils.getReviewerFromGithub();
+        System.out.println("All reviewer: " + Arrays.toString(reviewers));
         String reviewer = sendRequestUtils.getReviewer(reviewers, author);
 
         System.out.println("Reviewer: " + reviewer);
