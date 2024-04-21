@@ -114,6 +114,7 @@ public class SendRequestUtils {
         String reviewer = reviewers[queue].equals(author) ?
                 reviewers[queue + 1 >= reviewers.length ? 0 : queue++] : reviewers[queue];
         queue++;
+        System.out.println("queue (Person): " + reviewer);
         return reviewer;
     }
 
