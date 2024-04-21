@@ -27,7 +27,7 @@ public class GithubController {
                             .anyMatch(label -> label.getName().equals(ActionGithub.READY_FOR_REVIEW.action))) {
                 HttpURLConnection conn = githubService.removeLabel(githubPayloadDTO.getNumber());
                 if (conn.getResponseCode() == 200) {
-                    return "Label removed";
+                    return "Label  removed";
                 } else {
                     return "Error: " + conn.getResponseMessage();
                 }
