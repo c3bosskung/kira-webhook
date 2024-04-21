@@ -19,15 +19,15 @@ public class GithubController {
     private GithubService githubService;
 
     @PostMapping("/request-reviewer")
-    public String assignee(@RequestHeader(value = "X-GitHub-Event") String event, @RequestBody GithubPayloadDTO githubPayloadDTO){
+    public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO){
         try {
-            if (githubPayloadDTO.getAction().equals(ActionGithub.SYNCHRONIZE.action) &&
+            if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.SYNCHRONIZE.action) &&
                     Arrays.stream(githubPayloadDTO
                             .getPull_request().getLabels())
                             .anyMatch(label -> label.getName().equals(ActionGithub.READY_FOR_REVIEW.action))) {
                 System.out.println("Remove  labels");
                 return "Remove labels";
-            } else if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
+            } else if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
                 HttpURLConnection conn = githubService.assignUserToReviewers(
                         githubPayloadDTO.getNumber(),
                         "POST",
