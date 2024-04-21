@@ -9,4 +9,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 public class Discord {
     private String secret;
+    private String api;
+    private String channel;
 }
