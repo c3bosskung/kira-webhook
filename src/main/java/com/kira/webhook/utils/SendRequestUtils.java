@@ -40,8 +40,10 @@ public class SendRequestUtils {
         conn.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
         conn.setDoOutput(true);
 
+        String content = "{\"reviewers\":" + reviewer + "}";
+
         try(OutputStream os = conn.getOutputStream()) {
-            byte[] input = reviewer.getBytes("utf-8");
+            byte[] input = content.getBytes("utf-8");
             os.write(input, 0, input.length);
         }
 
@@ -77,7 +79,7 @@ public class SendRequestUtils {
         queue = queue + 1 >= reviewers.length ? 0 : queue + 1;
 
         JSONArray jsonArray = new JSONArray(Arrays.asList(filteredReviewers));
-        return  "{\"reviewers\":" + jsonArray + "}";
+        return jsonArray.toString();
     }
 
     private String getMention(String reviewer) {
