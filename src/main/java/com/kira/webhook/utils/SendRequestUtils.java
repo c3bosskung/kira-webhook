@@ -89,7 +89,7 @@ public class SendRequestUtils {
     }
 
     public HttpURLConnection removeLabel(Integer prNumber) throws IOException {
-        HttpURLConnection conn = openConnection("https://api.github.com/repos/c3bosskung/kira-webhook/pulls/" + prNumber + "/labels");
+        HttpURLConnection conn = openConnection("https://api.github.com/repos/c3bosskung/kira-webhook/issues/" + prNumber + "/labels");
         conn.setRequestMethod("DELETE");
         conn.setRequestProperty("Accept", "application/vnd.github+json");
         conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
