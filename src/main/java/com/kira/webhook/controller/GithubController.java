@@ -25,8 +25,12 @@ public class GithubController {
                     Arrays.stream(githubPayloadDTO
                             .getPull_request().getLabels())
                             .anyMatch(label -> label.getName().equals(ActionGithub.READY_FOR_REVIEW.action))) {
-                System.out.println("Remove   labels");
-                return "Remove labels";
+                HttpURLConnection conn = githubService.removeLabel(githubPayloadDTO.getNumber());
+                if (conn.getResponseCode() == 200) {
+                    return "Label removed";
+                } else {
+                    return "Error: " + conn.getResponseMessage();
+                }
             } else if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
                 HttpURLConnection conn = githubService.assignUserToReviewers(
                         githubPayloadDTO.getNumber(),
