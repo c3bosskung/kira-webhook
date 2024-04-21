@@ -5,10 +5,13 @@ import com.kira.webhook.config.Github;
 import com.kira.webhook.enums.DiscordUser;
 import com.kira.webhook.enums.GithubUser;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
@@ -49,6 +52,46 @@ public class SendRequestUtils {
         }
 
         return conn;
+    }
+
+    public String[] getReviewerFromGithub() throws IOException {
+        HttpURLConnection conn = openConnection("https://api.github.com/repos/c3bosskung/kira-webhook/collaborators");
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/vnd.github+json");
+        conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
+        conn.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
+
+        // Get the response
+        int responseCode = conn.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            StringBuilder content = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+
+            // Close connections
+            in.close();
+            conn.disconnect();
+
+            // Parse JSON response
+            JSONArray jsonArray = new JSONArray(content.toString());
+
+            // Convert JSONArray to String array
+            String[] reviewers = new String[jsonArray.length()];
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                reviewers[i] = jsonObject.getString("login");
+            }
+
+            return reviewers;
+        } else {
+            System.out.println("GET request not worked");
+        }
+
+        return null;
     }
 
     public HttpURLConnection discordAnnounce(String reviewer, String urlPR, String author) throws IOException {
