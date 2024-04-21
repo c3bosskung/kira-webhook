@@ -25,16 +25,12 @@ public class GithubController {
 
     @Autowired
     private GithubService githubService;
-    @Autowired
-    private DiscordService discordService;
-    @Autowired
-    private Discord discord;
 
     @PostMapping("/assignee")
-    public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO) throws IOException{
+    public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO){
         try {
             if (githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
-                githubService.assignUserToReviewers(
+                HttpURLConnection conn = githubService.assignUserToReviewers(
                         githubPayloadDTO.getNumber(),
                         "POST",
                         githubPayloadDTO
@@ -43,7 +39,11 @@ public class GithubController {
                                 .getLogin(),
                         githubPayloadDTO.getPull_request().getHtml_url()
                 );
-                return "Assignee added";
+                if (conn.getResponseCode() == 201) {
+                    return "Reviewer assigned";
+                } else {
+                    return "Error: " + conn.getResponseMessage();
+                }
             } else {
                 return "Action not supported";
             }
