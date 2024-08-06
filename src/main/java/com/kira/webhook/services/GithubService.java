@@ -18,6 +18,11 @@ public class GithubService {
 
     public HttpURLConnection assignUserToReviewers(Integer prNumber, String method, String author, String prURL) throws IOException {
         String[] reviewers = sendRequestUtils.getReviewerFromGithub();
+
+        if (reviewers == null || reviewers.length == 0) {
+            return null;
+        }
+
         System.out.println("All reviewer: " + Arrays.toString(reviewers));
         String reviewer = sendRequestUtils.getReviewer(reviewers, author);
 
