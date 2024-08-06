@@ -34,7 +34,7 @@ public class SendRequestUtils {
     }
 
     public HttpURLConnection githubReviewerAssign(String api, String reviewer, String author, Integer prNumber, String method) throws IOException {
-        HttpURLConnection conn = openConnection(api + "pulls/" + prNumber + "/requested_reviewers");
+        HttpURLConnection conn = openConnection(api + "/pulls/" + prNumber + "/requested_reviewers");
         conn.setRequestMethod(method);
         conn.setRequestProperty("Accept", "application/vnd.github+json");
         conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
@@ -53,7 +53,7 @@ public class SendRequestUtils {
     }
 
     public String[] getReviewerFromGithub(String api) throws IOException {
-        HttpURLConnection conn = openConnection(api + "collaborators");
+        HttpURLConnection conn = openConnection(api + "/collaborators");
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/vnd.github+json");
         conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
@@ -89,7 +89,7 @@ public class SendRequestUtils {
     }
 
     public HttpURLConnection removeLabel(Integer prNumber) throws IOException {
-        HttpURLConnection conn = openConnection(githubSecret.getApi() + "issues/" + prNumber + "/labels");
+        HttpURLConnection conn = openConnection(githubSecret.getApi() + "/issues/" + prNumber + "/labels");
         conn.setRequestMethod("DELETE");
         conn.setRequestProperty("Accept", "application/vnd.github+json");
         conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
