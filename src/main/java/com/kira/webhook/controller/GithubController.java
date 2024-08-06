@@ -21,6 +21,7 @@ public class GithubController {
     @PostMapping("/request-reviewer")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO){
         try {
+            System.out.println(githubPayloadDTO.getRepository().getHtml_url());
             if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.SYNCHRONIZE.action) &&
                     Arrays.stream(githubPayloadDTO
                             .getPull_request().getLabels())
