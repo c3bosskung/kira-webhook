@@ -11,4 +11,5 @@ public class GithubPayloadDTO {
     private LabelsDTO label;
     private PullRequestDTO pull_request;
     private RequestReviewer[] requested_reviewers;
+    private RepoInfoDTO repository;
 }

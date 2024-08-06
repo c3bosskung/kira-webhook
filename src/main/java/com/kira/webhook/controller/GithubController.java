@@ -21,6 +21,7 @@ public class GithubController {
     @PostMapping("/request-reviewer")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO){
         try {
+            System.out.println(githubPayloadDTO.getRepository().getUrl());
             if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.SYNCHRONIZE.action) &&
                     Arrays.stream(githubPayloadDTO
                             .getPull_request().getLabels())
@@ -33,6 +34,7 @@ public class GithubController {
                 }
             } else if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getAction().equals(ActionGithub.LABELED.action)) {
                 HttpURLConnection conn = githubService.assignUserToReviewers(
+                        githubPayloadDTO.getRepository().getUrl(),
                         githubPayloadDTO.getNumber(),
                         "POST",
                         githubPayloadDTO

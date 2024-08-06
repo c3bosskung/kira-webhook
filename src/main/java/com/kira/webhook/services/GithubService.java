@@ -16,8 +16,13 @@ public class GithubService {
 
     @Autowired DiscordService discordService;
 
-    public HttpURLConnection assignUserToReviewers(Integer prNumber, String method, String author, String prURL) throws IOException {
-        String[] reviewers = sendRequestUtils.getReviewerFromGithub();
+    public HttpURLConnection assignUserToReviewers(String api, Integer prNumber, String method, String author, String prURL) throws IOException {
+        String[] reviewers = sendRequestUtils.getReviewerFromGithub(api);
+
+        if (reviewers == null || reviewers.length == 0) {
+            return null;
+        }
+
         System.out.println("All reviewer: " + Arrays.toString(reviewers));
         String reviewer = sendRequestUtils.getReviewer(reviewers, author);
 
@@ -27,7 +32,7 @@ public class GithubService {
         System.out.println("method: " + method);
         System.out.println("prURL: " + prURL);
 
-        HttpURLConnection conn = sendRequestUtils.githubReviewerAssign(reviewer, author, prNumber, method);
+        HttpURLConnection conn = sendRequestUtils.githubReviewerAssign(api, reviewer, author, prNumber, method);
         System.out.println("Connection Github: " + conn.getResponseCode());
         System.out.println("Connection Github: " + conn.getResponseMessage());
         if (conn.getResponseCode() == 201) {
