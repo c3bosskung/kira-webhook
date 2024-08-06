@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RepoInfoDTO {
-    private String html_url;
+    private String url;
 }

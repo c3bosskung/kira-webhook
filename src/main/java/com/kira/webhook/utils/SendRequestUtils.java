@@ -33,8 +33,8 @@ public class SendRequestUtils {
         return  (HttpURLConnection) url.openConnection();
     }
 
-    public HttpURLConnection githubReviewerAssign(String reviewer, String author, Integer prNumber, String method) throws IOException {
-        HttpURLConnection conn = openConnection(githubSecret.getApi() + "pulls/" + prNumber + "/requested_reviewers");
+    public HttpURLConnection githubReviewerAssign(String api, String reviewer, String author, Integer prNumber, String method) throws IOException {
+        HttpURLConnection conn = openConnection(api + "pulls/" + prNumber + "/requested_reviewers");
         conn.setRequestMethod(method);
         conn.setRequestProperty("Accept", "application/vnd.github+json");
         conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
@@ -52,8 +52,8 @@ public class SendRequestUtils {
         return conn;
     }
 
-    public String[] getReviewerFromGithub() throws IOException {
-        HttpURLConnection conn = openConnection(githubSecret.getApi() + "collaborators");
+    public String[] getReviewerFromGithub(String api) throws IOException {
+        HttpURLConnection conn = openConnection(api + "collaborators");
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/vnd.github+json");
         conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
