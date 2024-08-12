@@ -17,7 +17,7 @@ public class GithubService {
     @Autowired DiscordService discordService;
 
     public HttpURLConnection assignUserToReviewers(String api, Integer prNumber, String method, String author, String prURL) throws IOException {
-        String[] reviewers = sendRequestUtils.getReviewerFromGithub(api);
+        String[] reviewers = Arrays.stream(sendRequestUtils.getReviewerFromGithub(api)).filter(s -> !s.equals("iamyourdeadpool")).toArray(String[]::new);
 
         if (reviewers == null || reviewers.length == 0) {
             return null;
