@@ -124,12 +124,15 @@ public class SendRequestUtils {
             return DiscordUser.BOSS.user;
         } else if (reviewer.equals(GithubUser.NINE.user)) {
             return DiscordUser.NINE.user;
+        } else if (reviewer.equals(GithubUser.JEROME.user)) {
+            return DiscordUser.JEROME.user;
         } else {
             return DiscordUser.EVERYONE.user;
         }
     }
 
     private String getContent(String reviewer, String urlPR, String author) {
+        System.out.println("discord reviewer: " + reviewer);
         String metion = getMention(reviewer);
         String authorMention = getMention(author);
         String msg = "Hi! " + metion + ", you have been assigned to review a pull request. Please check it out at " + urlPR + ". Author: " + authorMention + ".";

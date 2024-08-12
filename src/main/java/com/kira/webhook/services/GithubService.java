@@ -1,5 +1,6 @@
 package com.kira.webhook.services;
 
+import com.kira.webhook.DTOs.GithubPayload.RequestReviewer;
 import com.kira.webhook.utils.SendRequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,8 @@ public class GithubService {
 
     @Autowired DiscordService discordService;
 
-    public HttpURLConnection assignUserToReviewers(String api, Integer prNumber, String method, String author, String prURL) throws IOException {
-        String[] reviewers = sendRequestUtils.getReviewerFromGithub(api);
+    public HttpURLConnection assignUserToReviewers(String api, Integer prNumber, String method, String author, String prURL, RequestReviewer[] existReviewer) throws IOException {
+        String[] reviewers = Arrays.stream(sendRequestUtils.getReviewerFromGithub(api)).filter(s -> !s.equals("iamyourdeadpool")).toArray(String[]::new);
 
         if (reviewers == null || reviewers.length == 0) {
             return null;
@@ -32,11 +33,14 @@ public class GithubService {
         System.out.println("method: " + method);
         System.out.println("prURL: " + prURL);
 
-        HttpURLConnection conn = sendRequestUtils.githubReviewerAssign(api, reviewer, author, prNumber, method);
+        String reviewerCondition = existReviewer.length == 0? reviewer : existReviewer[0].getLogin().toString();
+
+        HttpURLConnection conn = sendRequestUtils.githubReviewerAssign(api, reviewerCondition, author, prNumber, method);
         System.out.println("Connection Github: " + conn.getResponseCode());
         System.out.println("Connection Github: " + conn.getResponseMessage());
-        if (conn.getResponseCode() == 201) {
-            HttpURLConnection dis = discordService.sendMessage(reviewer, prURL, author);
+
+        if (existReviewer.length > 0 || conn.getResponseCode() == 201) {
+            HttpURLConnection dis = discordService.sendMessage(reviewerCondition, prURL, author);
             System.out.println("Connection Discord: " + dis.getResponseCode());
             System.out.println("Connection Discord: " + dis.getResponseMessage());
         }

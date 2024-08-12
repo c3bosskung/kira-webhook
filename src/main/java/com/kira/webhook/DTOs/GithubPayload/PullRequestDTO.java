@@ -9,4 +9,5 @@ public class PullRequestDTO {
     private UserDTO user;
     private String html_url;
     private LabelDTO[] labels;
+    private RequestReviewer[] requested_reviewers;
 }

@@ -2,7 +2,8 @@ package com.kira.webhook.enums;
 
 public enum GithubUser {
     BOSS("c3bosskung"),
-    NINE("Nine0512");
+    NINE("Nine0512"),
+    JEROME("Lostjerome");
 
     public final String user;
 
