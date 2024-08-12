@@ -124,7 +124,7 @@ public class SendRequestUtils {
             return DiscordUser.BOSS.user;
         } else if (reviewer.equals(GithubUser.NINE.user)) {
             return DiscordUser.NINE.user;
-        } else if (reviewer.equals(GithubUser.JEROME)) {
+        } else if (reviewer.equals(GithubUser.JEROME.user)) {
             return DiscordUser.JEROME.user;
         } else {
             return DiscordUser.EVERYONE.user;
