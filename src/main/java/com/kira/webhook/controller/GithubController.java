@@ -41,7 +41,8 @@ public class GithubController {
                                 .getPull_request()
                                 .getUser()
                                 .getLogin(),
-                        githubPayloadDTO.getPull_request().getHtml_url()
+                        githubPayloadDTO.getPull_request().getHtml_url(),
+                        githubPayloadDTO.getRequested_reviewers()
                 );
                 if (conn.getResponseCode() == 201) {
                     return "Reviewer assigned";
