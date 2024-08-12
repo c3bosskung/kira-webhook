@@ -33,7 +33,7 @@ public class GithubService {
         System.out.println("method: " + method);
         System.out.println("prURL: " + prURL);
 
-        String reviewerCondition = existReviewer.length == 0? reviewer : existReviewer[0].toString();
+        String reviewerCondition = existReviewer.length == 0? reviewer : existReviewer[0].getLogin().toString();
 
         HttpURLConnection conn = sendRequestUtils.githubReviewerAssign(api, reviewerCondition, author, prNumber, method);
         System.out.println("Connection Github: " + conn.getResponseCode());
