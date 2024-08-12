@@ -33,14 +33,13 @@ public class GithubService {
         System.out.println("method: " + method);
         System.out.println("prURL: " + prURL);
 
-        HttpURLConnection conn = null;
-        if (existReviewer.length == 0) {
-            conn = sendRequestUtils.githubReviewerAssign(api, reviewer, author, prNumber, method);
-            System.out.println("Connection Github: " + conn.getResponseCode());
-            System.out.println("Connection Github: " + conn.getResponseMessage());
-        }
+        String reviewerCondition = existReviewer.length == 0? reviewer : existReviewer[0].toString();
+
+        HttpURLConnection conn = sendRequestUtils.githubReviewerAssign(api, reviewerCondition, author, prNumber, method);
+        System.out.println("Connection Github: " + conn.getResponseCode());
+        System.out.println("Connection Github: " + conn.getResponseMessage());
+
         if (existReviewer.length > 0 || conn.getResponseCode() == 201) {
-            String reviewerCondition = existReviewer.length == 0? reviewer : existReviewer[0].toString();
             HttpURLConnection dis = discordService.sendMessage(reviewerCondition, prURL, author);
             System.out.println("Connection Discord: " + dis.getResponseCode());
             System.out.println("Connection Discord: " + dis.getResponseMessage());
