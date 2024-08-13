@@ -88,8 +88,8 @@ public class SendRequestUtils {
         return null;
     }
 
-    public HttpURLConnection removeLabel(Integer prNumber) throws IOException {
-        HttpURLConnection conn = openConnection(githubSecret.getApi() + "/issues/" + prNumber + "/labels");
+    public HttpURLConnection removeLabel(String api, Integer prNumber) throws IOException {
+        HttpURLConnection conn = openConnection(api + "/issues/" + prNumber + "/labels");
         conn.setRequestMethod("DELETE");
         conn.setRequestProperty("Accept", "application/vnd.github+json");
         conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());

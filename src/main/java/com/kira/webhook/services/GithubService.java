@@ -47,7 +47,7 @@ public class GithubService {
         return conn;
     }
 
-    public HttpURLConnection removeLabel(Integer prNumber) throws IOException {
-        return sendRequestUtils.removeLabel(prNumber);
+    public HttpURLConnection removeLabel(String api, Integer prNumber) throws IOException {
+        return sendRequestUtils.removeLabel(api, prNumber);
     }
 }

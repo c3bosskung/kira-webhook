@@ -26,7 +26,7 @@ public class GithubController {
                     Arrays.stream(githubPayloadDTO
                             .getPull_request().getLabels())
                             .anyMatch(label -> label.getName().equals(ActionGithub.READY_FOR_REVIEW.action))) {
-                HttpURLConnection conn = githubService.removeLabel(githubPayloadDTO.getNumber());
+                HttpURLConnection conn = githubService.removeLabel(githubPayloadDTO.getRepository().getUrl(), githubPayloadDTO.getNumber());
                 if (conn.getResponseCode() == 204) {
                     return "Label removed";
                 } else {
