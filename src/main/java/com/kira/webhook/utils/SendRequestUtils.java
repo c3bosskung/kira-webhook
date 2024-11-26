@@ -59,8 +59,6 @@ public class SendRequestUtils {
         conn.setRequestProperty("Authorization", "Bearer " + githubSecret.getSecret());
         conn.setRequestProperty("X-GitHub-Api-Version", "2022-11-28");
 
-        System.out.println("secret: " +  githubSecret.getSecret());
-
         int responseCode = conn.getResponseCode();
         System.out.println("GET Response Code :: " + responseCode);
         if (responseCode == HttpURLConnection.HTTP_OK) { // success
