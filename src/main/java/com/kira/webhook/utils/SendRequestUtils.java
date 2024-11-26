@@ -62,6 +62,7 @@ public class SendRequestUtils {
         System.out.println("secret: " +  githubSecret.getSecret());
 
         int responseCode = conn.getResponseCode();
+        System.out.println("GET Response Code :: " + responseCode);
         if (responseCode == HttpURLConnection.HTTP_OK) { // success
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
