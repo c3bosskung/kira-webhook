@@ -72,6 +72,7 @@ public class GithubController {
                         githubPayloadDTO.getWorkflow_job().getHtml_url(),
                         githubPayloadDTO.getWorkflow_job().getStatus()
                 );
+                return "Deployment status sent to Discord";
             }
         } catch (Exception e) {
             return "Error: " + e.getMessage();
