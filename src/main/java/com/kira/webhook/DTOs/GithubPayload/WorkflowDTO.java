@@ -9,4 +9,5 @@ public class WorkflowDTO {
     private String workflow_name;
     private String status;
     private String html_url;
+    private String name;
 }
