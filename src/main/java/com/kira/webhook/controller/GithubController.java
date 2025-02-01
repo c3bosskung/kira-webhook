@@ -68,8 +68,10 @@ public class GithubController {
             if (githubPayloadDTO.getAction() != null
                     && githubPayloadDTO.getWorkflow_job().getName().contains("deploy")
                     && !githubPayloadDTO.getWorkflow_job().getStatus().contains("queued")
-                    && (githubPayloadDTO.getWorkflow_job().getConclusion() != null &&
-                        !githubPayloadDTO.getWorkflow_job().getConclusion().contains("cancelled"))) {
+                    && (((githubPayloadDTO.getWorkflow_job().getConclusion() == null &&
+                        githubPayloadDTO.getWorkflow_job().getStatus().contains("in_progress"))) ||
+                    (githubPayloadDTO.getWorkflow_job().getConclusion() != null &&
+                            githubPayloadDTO.getWorkflow_job().getConclusion().contains("success")))) {
                 HttpURLConnection conn = githubService.announceDeployStatus(
                         githubPayloadDTO.getSender().getLogin(),
                         githubPayloadDTO.getWorkflow_job().getWorkflow_name().toLowerCase().contains("prod"),
