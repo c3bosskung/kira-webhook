@@ -133,7 +133,7 @@ public class SendRequestUtils {
                     step == ActionGithub.COMPLETED.action ? getContentDeployCompleted(author, URL).getBytes("utf-8") :
                             "Something Wrong".getBytes("utf-8");
             os.write(input, 0, input.length);
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
 
