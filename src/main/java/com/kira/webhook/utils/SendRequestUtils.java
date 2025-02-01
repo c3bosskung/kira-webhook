@@ -183,7 +183,7 @@ public class SendRequestUtils {
 
     private String getContentDeployCompleted(String author, String URL, String branch) {
         String authorMention = getMention(author);
-        String msg = "Hi! " + authorMention + ", :green_square: your deployment from" + "`" + branch + "`" + " has been completed. Please check it out at " + URL + ".";
+        String msg = "Hi! " + authorMention + ", :green_square: your deployment from" + "`" + branch + "`" + " has been completed.";
         String body = "{ \"content\": \"" + msg + "\"}";
         System.out.println("discord body: " + body);
         return body;
