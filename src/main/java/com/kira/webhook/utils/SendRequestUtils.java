@@ -2,6 +2,7 @@ package com.kira.webhook.utils;
 
 import com.kira.webhook.config.Discord;
 import com.kira.webhook.config.Github;
+import com.kira.webhook.enums.ActionGithub;
 import com.kira.webhook.enums.DiscordUser;
 import com.kira.webhook.enums.GithubUser;
 import org.json.JSONArray;
@@ -113,6 +114,25 @@ public class SendRequestUtils {
         return conn;
     }
 
+    public HttpURLConnection discordAnnounceDeploy(String author, Boolean isProd, String URL, String step) throws IOException {
+        HttpURLConnection conn = openConnection(discordSecret.getApi() +
+                (isProd? discordSecret.getChannel_prod() : discordSecret.getChannel_qa()) + "/messages");
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Authorization", discordSecret.getSecret());
+        conn.setDoOutput(true);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] input = step == ActionGithub.IN_PROGRESS.action ?
+                    getContentDeployInProgress(author, URL).getBytes("utf-8") :
+                    step == ActionGithub.COMPLETED.action ? getContentDeployCompleted(author, URL).getBytes("utf-8") :
+                            "Something Wrong".getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        return conn;
+    }
+
     public String getReviewer(String[] reviewers, String author) {
         String reviewer = reviewers[queue].equals(author) ?
                 reviewers[queue + 1 >= reviewers.length ? 0 : ++queue] : reviewers[queue];
@@ -137,6 +157,20 @@ public class SendRequestUtils {
         String metion = getMention(reviewer);
         String authorMention = getMention(author);
         String msg = "Hi! " + metion + ", you have been assigned to review a pull request. Please check it out at " + urlPR + ". Author: " + authorMention + ".";
+        String body = "{ \"content\": \"" + msg + "\"}";
+        return body;
+    }
+
+    private String getContentDeployInProgress(String author, String URL) {
+        String authorMention = getMention(author);
+        String msg = "Hi! " + authorMention + ", your deployment is in progress. Please check it out at " + URL + ".";
+        String body = "{ \"content\": \"" + msg + "\"}";
+        return body;
+    }
+
+    private String getContentDeployCompleted(String author, String URL) {
+        String authorMention = getMention(author);
+        String msg = "Hi! " + authorMention + ", your deployment has been completed. Please check it out at " + URL + ".";
         String body = "{ \"content\": \"" + msg + "\"}";
         return body;
     }

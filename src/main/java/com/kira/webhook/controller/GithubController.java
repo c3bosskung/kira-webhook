@@ -2,6 +2,7 @@ package com.kira.webhook.controller;
 
 import com.kira.webhook.DTOs.GithubPayload.GithubPayloadDTO;
 import com.kira.webhook.enums.ActionGithub;
+import com.kira.webhook.services.DiscordService;
 import com.kira.webhook.services.GithubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class GithubController {
 
     @Autowired
     private GithubService githubService;
+
+    @Autowired
+    private DiscordService discordService;
 
     @PostMapping("/request-reviewer")
     public String assignee(@RequestBody GithubPayloadDTO githubPayloadDTO){
@@ -55,5 +59,23 @@ public class GithubController {
         } catch (IOException e) {
             return "Error: " + e.getMessage();
         }
+    }
+
+    @PostMapping("/deploy-status")
+    public String deployStatus(@RequestBody GithubPayloadDTO githubPayloadDTO) {
+        try {
+            System.out.println(githubPayloadDTO.getRepository().getUrl());
+            if (githubPayloadDTO.getAction() != null) {
+                discordService.sendMessageDeploymentStatus(
+                        githubPayloadDTO.getPull_request().getUser().getLogin(),
+                        githubPayloadDTO.getWorkflow_job().getWorkflow_name().toLowerCase().contains("prod"),
+                        githubPayloadDTO.getWorkflow_job().getHtml_url(),
+                        githubPayloadDTO.getWorkflow_job().getStatus()
+                );
+            }
+        } catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
+        return "Action not supported";
     }
 }

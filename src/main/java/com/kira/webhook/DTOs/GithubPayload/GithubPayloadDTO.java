@@ -12,4 +12,5 @@ public class GithubPayloadDTO {
     private PullRequestDTO pull_request;
     private RequestReviewer[] requested_reviewers;
     private RepoInfoDTO repository;
+    private WorkflowDTO workflow_job;
 }

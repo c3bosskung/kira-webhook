@@ -16,4 +16,8 @@ public class DiscordService {
     public HttpURLConnection sendMessage(String reviewer, String prURL, String author) throws IOException {
        return sendRequestUtils.discordAnnounce(reviewer, prURL, author);
     }
+
+    public HttpURLConnection sendMessageDeploymentStatus(String author, Boolean isProd, String URL, String step) throws IOException {
+        return sendRequestUtils.discordAnnounceDeploy(author, isProd, URL, step);
+    }
 }
