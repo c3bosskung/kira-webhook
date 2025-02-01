@@ -11,4 +11,5 @@ public class WorkflowDTO {
     private String html_url;
     private String name;
     private String conclusion;
+    private String head_branch;
 }

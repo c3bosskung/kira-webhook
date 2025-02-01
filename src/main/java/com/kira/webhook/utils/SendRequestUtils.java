@@ -114,7 +114,7 @@ public class SendRequestUtils {
         return conn;
     }
 
-    public HttpURLConnection discordAnnounceDeploy(String author, Boolean isProd, String URL, String step) throws IOException {
+    public HttpURLConnection discordAnnounceDeploy(String author, Boolean isProd, String URL, String step, String branch) throws IOException {
         HttpURLConnection conn = openConnection(discordSecret.getApi() +
                 (isProd? discordSecret.getChannel_prod() : discordSecret.getChannel_qa()) + "/messages");
         conn.setRequestMethod("POST");
@@ -131,9 +131,9 @@ public class SendRequestUtils {
             System.out.println();
             byte[] input;
             if (step.equals(ActionGithub.COMPLETED.action)) {
-                input = getContentDeployCompleted(isProd? "everyone" : author, URL).getBytes("utf-8");
+                input = getContentDeployCompleted(isProd? "everyone" : author, URL, branch).getBytes("utf-8");
             } else if (step.equals(ActionGithub.IN_PROGRESS.action)) {
-                input = getContentDeployInProgress(isProd? "everyone" : author, URL).getBytes("utf-8");
+                input = getContentDeployInProgress(isProd? "everyone" : author, URL, branch).getBytes("utf-8");
             } else {
                 input = ("{ \"content\": \"" + "Something Wrong" + "\"}").getBytes("utf-8");
             }
@@ -173,16 +173,16 @@ public class SendRequestUtils {
         return body;
     }
 
-    private String getContentDeployInProgress(String author, String URL) {
+    private String getContentDeployInProgress(String author, String URL, String branch) {
         String authorMention = getMention(author);
-        String msg = "Hi! " + authorMention + ", \n\n:yellow_square: your deployment is in progress. \nPlease check it out at " + URL + ".";
+        String msg = "Hi! " + authorMention + ", \n\n:yellow_square: your deployment from " + "`" + branch + "`" + " is in progress. \nPlease check it out at " + URL + ".";
         String body = "{ \"content\": \"" + msg + "\"}";
         return body;
     }
 
-    private String getContentDeployCompleted(String author, String URL) {
+    private String getContentDeployCompleted(String author, String URL, String branch) {
         String authorMention = getMention(author);
-        String msg = "Hi! " + authorMention + ", \n\n:green_square: your deployment has been completed. \nPlease check it out at " + URL + ".";
+        String msg = "Hi! " + authorMention + ", \n\n:green_square: your deployment from" + "`" + branch + "`" + " has been completed. \nPlease check it out at " + URL + ".";
         String body = "{ \"content\": \"" + msg + "\"}";
         return body;
     }

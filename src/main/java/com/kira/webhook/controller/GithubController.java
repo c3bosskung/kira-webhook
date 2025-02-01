@@ -76,7 +76,8 @@ public class GithubController {
                         githubPayloadDTO.getSender().getLogin(),
                         githubPayloadDTO.getWorkflow_job().getWorkflow_name().toLowerCase().contains("prod"),
                         githubPayloadDTO.getWorkflow_job().getHtml_url(),
-                        githubPayloadDTO.getWorkflow_job().getStatus()
+                        githubPayloadDTO.getWorkflow_job().getStatus(),
+                        githubPayloadDTO.getWorkflow_job().getHead_branch()
                 );
                 if (conn.getResponseCode() == 200) {
                     return "Deployment status announced";

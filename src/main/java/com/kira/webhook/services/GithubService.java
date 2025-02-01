@@ -52,7 +52,7 @@ public class GithubService {
         return sendRequestUtils.removeLabel(prNumber);
     }
 
-    public HttpURLConnection announceDeployStatus(String author, Boolean isProd, String URL, String step) throws IOException {
-        return discordService.sendMessageDeploymentStatus(author, isProd, URL, step);
+    public HttpURLConnection announceDeployStatus(String author, Boolean isProd, String URL, String step, String branch) throws IOException {
+        return discordService.sendMessageDeploymentStatus(author, isProd, URL, step, branch);
     }
 }

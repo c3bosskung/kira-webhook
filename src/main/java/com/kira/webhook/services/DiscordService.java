@@ -17,7 +17,7 @@ public class DiscordService {
        return sendRequestUtils.discordAnnounce(reviewer, prURL, author);
     }
 
-    public HttpURLConnection sendMessageDeploymentStatus(String author, Boolean isProd, String URL, String step) throws IOException {
+    public HttpURLConnection sendMessageDeploymentStatus(String author, Boolean isProd, String URL, String step, String branch) throws IOException {
         System.out.println("Sending deployment status to Discord");
         //value
         System.out.println("-----------------");
@@ -25,7 +25,8 @@ public class DiscordService {
         System.out.println("isProd: " + isProd);
         System.out.println("URL: " + URL);
         System.out.println("step: " + step);
+        System.out.println("branch: " + branch);
         System.out.println("-----------------");
-        return sendRequestUtils.discordAnnounceDeploy(author, isProd, URL, step);
+        return sendRequestUtils.discordAnnounceDeploy(author, isProd, URL, step, branch);
     }
 }
