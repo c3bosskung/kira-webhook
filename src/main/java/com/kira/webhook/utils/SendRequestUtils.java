@@ -131,9 +131,9 @@ public class SendRequestUtils {
             System.out.println();
             byte[] input;
             if (step.equals(ActionGithub.COMPLETED.action)) {
-                input = getContentDeployCompleted(author, URL).getBytes("utf-8");
+                input = getContentDeployCompleted(isProd? "everyone" : author, URL).getBytes("utf-8");
             } else if (step.equals(ActionGithub.IN_PROGRESS.action)) {
-                input = getContentDeployInProgress(author, URL).getBytes("utf-8");
+                input = getContentDeployInProgress(isProd? "everyone" : author, URL).getBytes("utf-8");
             } else {
                 input = ("{ \"content\": \"" + "Something Wrong" + "\"}").getBytes("utf-8");
             }
@@ -175,14 +175,14 @@ public class SendRequestUtils {
 
     private String getContentDeployInProgress(String author, String URL) {
         String authorMention = getMention(author);
-        String msg = "Hi! " + authorMention + ", your deployment is in progress. Please check it out at " + URL + ".";
+        String msg = "Hi! " + authorMention + ", \n\n:yellow_square: your deployment is in progress. \nPlease check it out at " + URL + ".";
         String body = "{ \"content\": \"" + msg + "\"}";
         return body;
     }
 
     private String getContentDeployCompleted(String author, String URL) {
         String authorMention = getMention(author);
-        String msg = "Hi! " + authorMention + ", your deployment has been completed. Please check it out at " + URL + ".";
+        String msg = "Hi! " + authorMention + ", \n\n:green_square: your deployment has been completed. \nPlease check it out at " + URL + ".";
         String body = "{ \"content\": \"" + msg + "\"}";
         return body;
     }
