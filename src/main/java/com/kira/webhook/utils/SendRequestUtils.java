@@ -177,6 +177,7 @@ public class SendRequestUtils {
         String authorMention = getMention(author);
         String msg = "Hi! " + authorMention + ", \n\n:yellow_square: your deployment from " + "`" + branch + "`" + " is in progress. \nPlease check it out at " + URL + ".";
         String body = "{ \"content\": \"" + msg + "\"}";
+        System.out.println("discord body: " + body);
         return body;
     }
 
@@ -184,6 +185,7 @@ public class SendRequestUtils {
         String authorMention = getMention(author);
         String msg = "Hi! " + authorMention + ", \n\n:green_square: your deployment from" + "`" + branch + "`" + " has been completed. \nPlease check it out at " + URL + ".";
         String body = "{ \"content\": \"" + msg + "\"}";
+        System.out.println("discord body: " + body);
         return body;
     }
 
