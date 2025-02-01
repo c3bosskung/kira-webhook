@@ -122,12 +122,19 @@ public class SendRequestUtils {
         conn.setRequestProperty("Authorization", discordSecret.getSecret());
         conn.setDoOutput(true);
 
+        System.out.println("discord author: " + author);
+        System.out.println("discord isProd: " + isProd);
+        System.out.println("discord URL: " + URL);
+        System.out.println("discord step: " + step);
+
         try (OutputStream os = conn.getOutputStream()) {
             byte[] input = step == ActionGithub.IN_PROGRESS.action ?
                     getContentDeployInProgress(author, URL).getBytes("utf-8") :
                     step == ActionGithub.COMPLETED.action ? getContentDeployCompleted(author, URL).getBytes("utf-8") :
                             "Something Wrong".getBytes("utf-8");
             os.write(input, 0, input.length);
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
         return conn;
