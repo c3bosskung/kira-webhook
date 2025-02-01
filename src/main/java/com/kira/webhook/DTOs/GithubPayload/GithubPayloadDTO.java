@@ -13,4 +13,5 @@ public class GithubPayloadDTO {
     private RequestReviewer[] requested_reviewers;
     private RepoInfoDTO repository;
     private WorkflowDTO workflow_job;
+    private SenderDTO sender;
 }

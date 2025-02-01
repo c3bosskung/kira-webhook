@@ -67,7 +67,7 @@ public class GithubController {
             System.out.println(githubPayloadDTO.getRepository().getUrl());
             if (githubPayloadDTO.getAction() != null) {
                 discordService.sendMessageDeploymentStatus(
-                        githubPayloadDTO.getPull_request().getUser().getLogin(),
+                        githubPayloadDTO.getSender().getLogin(),
                         githubPayloadDTO.getWorkflow_job().getWorkflow_name().toLowerCase().contains("prod"),
                         githubPayloadDTO.getWorkflow_job().getHtml_url(),
                         githubPayloadDTO.getWorkflow_job().getStatus()
