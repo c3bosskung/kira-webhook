@@ -66,13 +66,17 @@ public class GithubController {
         try {
             System.out.println(githubPayloadDTO.getRepository().getUrl());
             if (githubPayloadDTO.getAction() != null) {
-                discordService.sendMessageDeploymentStatus(
+                HttpURLConnection conn = githubService.announceDeployStatus(
                         githubPayloadDTO.getSender().getLogin(),
                         githubPayloadDTO.getWorkflow_job().getWorkflow_name().toLowerCase().contains("prod"),
                         githubPayloadDTO.getWorkflow_job().getHtml_url(),
                         githubPayloadDTO.getWorkflow_job().getStatus()
                 );
-                return "Deployment status sent to Discord";
+                if (conn.getResponseCode() == 200) {
+                    return "Deployment status announced";
+                } else {
+                    return "Error: " + conn.getResponseMessage();
+                }
             }
         } catch (Exception e) {
             return "Error: " + e.getMessage();
