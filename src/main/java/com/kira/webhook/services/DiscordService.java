@@ -18,6 +18,14 @@ public class DiscordService {
     }
 
     public HttpURLConnection sendMessageDeploymentStatus(String author, Boolean isProd, String URL, String step) throws IOException {
+        System.out.println("Sending deployment status to Discord");
+        //value
+        System.out.println("-----------------");
+        System.out.println("author: " + author);
+        System.out.println("isProd: " + isProd);
+        System.out.println("URL: " + URL);
+        System.out.println("step: " + step);
+        System.out.println("-----------------");
         return sendRequestUtils.discordAnnounceDeploy(author, isProd, URL, step);
     }
 }
