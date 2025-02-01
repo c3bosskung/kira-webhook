@@ -128,10 +128,15 @@ public class SendRequestUtils {
         System.out.println("discord step: " + step);
 
         try (OutputStream os = conn.getOutputStream()) {
-            byte[] input = step == ActionGithub.IN_PROGRESS.action ?
-                    getContentDeployInProgress(author, URL).getBytes("utf-8") :
-                    step == ActionGithub.COMPLETED.action ? getContentDeployCompleted(author, URL).getBytes("utf-8") :
-                            "Something Wrong".getBytes("utf-8");
+            System.out.println();
+            byte[] input;
+            if (step.equals(ActionGithub.COMPLETED.action)) {
+                input = getContentDeployCompleted(author, URL).getBytes("utf-8");
+            } else if (step.equals(ActionGithub.IN_PROGRESS.action)) {
+                input = getContentDeployInProgress(author, URL).getBytes("utf-8");
+            } else {
+                input = ("{ \"content\": \"" + "Something Wrong" + "\"}").getBytes("utf-8");
+            }
             os.write(input, 0, input.length);
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
