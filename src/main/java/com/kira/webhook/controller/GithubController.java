@@ -65,7 +65,7 @@ public class GithubController {
     public String deployStatus(@RequestBody GithubPayloadDTO githubPayloadDTO) {
         try {
             System.out.println(githubPayloadDTO.getRepository().getUrl());
-            if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getWorkflow_job().getName().contains("deploy") && githubPayloadDTO.getWorkflow_job().getStatus().contains("queued")) {
+            if (githubPayloadDTO.getAction() != null && githubPayloadDTO.getWorkflow_job().getName().contains("deploy") && !githubPayloadDTO.getWorkflow_job().getStatus().contains("queued")) {
                 HttpURLConnection conn = githubService.announceDeployStatus(
                         githubPayloadDTO.getSender().getLogin(),
                         githubPayloadDTO.getWorkflow_job().getWorkflow_name().toLowerCase().contains("prod"),
